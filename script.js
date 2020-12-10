@@ -15,14 +15,9 @@ $('.js_sectionSwitch').on('click', function(){
         let period = $(this).data('type');
         $(this).siblings().removeClass('active');
         $(document).find('.js_infoCard').each(function( inx, el ) {
-            if($(el).hasClass(period)){
-                $(el).addClass('show');
+                $(el).data('active', period)
                 if (isIntersection) numberObserv.observe(el);
                 else animate(el);
-            }
-            else{
-                $(el).removeClass('show')
-            }
         })
     }
 });
@@ -49,9 +44,12 @@ const numberObserv = new IntersectionObserver(callback, options);
 
 // Функция запуска анимации
 function animate(el){
-    let elCount = $(el).find('.info_cardNum');
-    if(elCount.data('count')){
-        $({ Counter: 0 }).animate({ Counter: elCount.data('count') }, {
+    let elCount = $(el).find('.info_cardNum'),
+        active = $(el).data('active')
+
+//console.log(elCount.data(`count-${active}`))
+    if(elCount.data(`count-${active}`)){
+        $({ Counter: Number(elCount.text()) }).animate({ Counter: elCount.data(`count-${active}`) }, {
             duration: 1000,
             easing: 'swing',
             step: function () {
